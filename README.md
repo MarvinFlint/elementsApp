@@ -14,14 +14,10 @@ Expressjs settings, such as port and url can be changed in **app.js** in the roo
 ---
 
 ## Functionality
-
+| Action          | Function               |
 | Left mousedrag  | change camera angle    |
-|-----------------|------------------------|
 | Right mousedrag | change camera position |
-|-----------------|------------------------|
 | mousewheel      | zoom in or out         |
-|-----------------|------------------------|
 | single click    | helper text            |
-|-----------------|------------------------|
 | double click    | open current element   |
-|-----------------|------------------------|
+
