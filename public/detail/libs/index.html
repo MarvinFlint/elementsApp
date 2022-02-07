@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Atommodell</title>
+    
+    <link href='./style.css' rel='stylesheet' type='text/css'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700;800&display=swap');
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="./static/elements_1c_white.png">
+    </header>
+    <main class="container">
+        <article>
+            <div id="stage"></div>
+        </article>
+        <aside class="info">
+            <section  class="attribut-sctn">
+                <div class="symbol-block">
+                    <h4 id="atomicnumber"></h4>
+                    <h1 id="symbol"></h1>
+                    <h4 id="name"></h4>
+                </div>
+                <table>
+                    <tr>
+                        <td><strong>group block: </strong></td>
+                        <td id="groupblock"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>boiling point: </strong></td>
+                        <td id="boilingpoint"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>electronegativity: </strong></td>
+                        <td id="electronegativity"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>year discovered: </strong></td>
+                        <td id="yeardiscovered"></td>
+                    </tr>
+                </table>
+                <!-- <p><strong>group block:</strong>noble gas</p>
+                <p><strong>boiling point:</strong> 50000 deg<f/p>
+                <p><strong>electronegativity:</strong>2.2</p>
+                <p><strong>year discovered</strong>Ancient</p> -->
+            </section>
+            <video class="standardstate" loop autoplay>
+                <source src=".\static\gas_volume_white_cropped.mp4" type=video/mp4>
+            </video>
+            <p class="state">gas</p>
+        </aside>
+    </main>
+    
+    <!-- Libaries -->
+    <script src="libs/jquery.js"></script>
+
+    <script src="libs/three.js"></script>
+    <script src="libs/stats.js"></script>
+    <script src="libs/OrbitControls.js"></script>
+
+    <script src="libs/d3.js"></script>
+    <script src="libs/d3.layout.force3D.js"></script>
+
+    <!-- Atommodell -->
+    <script src="js/atommodell.js"></script>
+</body>
+
+</html>

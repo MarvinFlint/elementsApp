@@ -1,0 +1,133 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 100%;
+    overflow: hidden;
+    background-color: rgb(30, 30, 30);
+    height: 100%;
+    cursor: url(static/cursor-arrow.svg) 5 5, auto;
+}
+
+article {
+    position: relative;
+}
+.container {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    height: 100vh;
+}
+
+#stage {
+    position: absolute;
+    top:0px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.attrbut-sctn {
+    margin-bottom: 5rem;
+}
+
+.info {
+display: none;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+z-index: 1;
+color: white;
+background-color: #816CFF;
+}
+
+h1 {
+font-size: 6rem;
+line-height: 6rem;
+}
+
+.symbol-block {
+    margin-bottom: 2rem;
+}
+
+p {
+font-size: 1.3rem;
+padding: 0.2rem;
+}
+
+td {
+    padding: 0.1rem;
+    padding-right: 1.8rem;
+}
+
+h4 {
+    font-size: 2rem;
+}
+
+.logo {
+position: absolute;
+margin: 2.5rem;
+width: 12rem;
+z-index: 3;
+cursor: url(static/cursor-hand.svg) 5 5, auto;
+}
+
+video {
+    width: 50%;
+    height: auto;
+    margin-top: 1rem;
+}
+
+.gif {
+    width: 53%;
+    height: auto;
+    margin-top: 1rem;
+}
+
+.x {
+    position: absolute;
+    height: 5%;
+    margin: 3rem 2.5rem;
+    right: 26.5%;
+    z-index: 4;
+    cursor: url(static/cursor-hand.svg) 5 5, auto;
+    transition: all 0.5s;
+}
+
+.x:hover{
+    height: 5.5%;
+}
+
+.arrow-left {
+    position: absolute;
+    height: 5%;
+    left: 2.5rem;
+    top: 45%;
+    z-index: 4;
+    cursor: url(static/cursor-hand.svg) 5 5, auto;
+    transition: all 0.5s;
+}
+
+.arrow-left:hover{
+    height: 5.5%;
+}
+
+.arrow-right {
+    position: absolute;
+    height: 5%;
+    top: 45%;
+    right: 5%;
+    z-index: 4;
+    cursor: url(static/cursor-hand.svg) 5 5, auto;
+    transition: all 0.5s;
+}
+
+.arrow-right:hover{
+    height: 5.5%;
+}
