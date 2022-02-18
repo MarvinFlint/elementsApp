@@ -629,10 +629,10 @@ function resetAlertTimer() {
 }
 
 /* detailview js */
-
+let switchId = 0;
 // function with id as parameter
 function loadDetailView(id){
-  console.log("test");
+  $('.webgl').fadeOut();
   // read json file
   $.getJSON("/periodic-table.json", function (data) {
 
@@ -640,12 +640,8 @@ function loadDetailView(id){
     var pivot = new THREE.Object3D();
   
     // set the initial value for the second canvas
-    var ordnungszahl = id; 
-
-    // arrow functionality
-    $(".left").on('click', () => { ordnungszahl++ });
-    $(".right").on('click', () => { ordnungszahl-- });
-
+    var ordnungszahl = id;
+    switchId = ordnungszahl;
     var quaternion = new THREE.Quaternion();
     var object;
   
@@ -978,16 +974,18 @@ function loadDetailView(id){
     // }
   
     // GIFs
+    
     if (standardState == "solid") {
-      $(".gif").attr("src", "../static/cube_gif_800px_transparent.gif");
+      $(".cube").css('display', 'block');
     } else if (standardState == "liquid") {
-      $(".gif").attr("src", "../static/fluid_gif_800px_transparent.gif");
+      $(".fluid").css('display', 'block');
     } else if (standardState == "gas") {
-      $(".gif").attr("src", "../static/cloud_gif_800px_violet.gif");
+      $(".cloud").css('display', 'block');
     } else {
-      $(".gif").attr("src", "../static/cloud_gif_800px_violet.gif");
+      $(".cloud").css('display', 'block');
     }
-  
+    
+
     $("#atomicnumber").text(pElement.atomicNumber);
     $("#symbol").text(pElement.symbol);
     $("#name").text(pElement.name);
@@ -997,14 +995,25 @@ function loadDetailView(id){
     $("#electronegativity").text(pElement.electronegativity);
     $("#yeardiscovered").text(pElement.yearDiscovered);
   
-    $(".state").text(pElement.standardState);
+    $(".eState").text(pElement.standardState);
   });
 }
 
 $('.x, .logo-detail').on('click', () => {
-  $('.container, .header').fadeOut();
+  $('.container, header').fadeOut();
+  $('.webgl').fadeIn();
 })
 
 $(() => {
   $('.info').fadeIn(1500).css('display', 'flex');
+})
+
+$('.arrow').on('click', (e) => {
+  console.log(e);
+  if(e.target.classList.contains('arrow-left') && switchId > 0){
+    loadDetailView(switchId - 1);
+  }
+  else{
+    loadDetailView(switchId + 1);
+  }  
 })

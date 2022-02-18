@@ -287,6 +287,7 @@ header{
   width: 100%;
   overflow: hidden;
   z-index: 2;
+  background-color: black;
 }
 
 .attrbut-sctn {
@@ -347,7 +348,8 @@ video {
 
 .x {
   position: absolute;
-  height: 5%;
+  height: 40px;
+  width: 40px;
   margin: 3rem 2.5rem;
   right: 26.5%;
   z-index: 4;
@@ -356,33 +358,33 @@ video {
 }
 
 .x:hover {
-  height: 5.5%;
+  height: 50px;
+  width: 50px;
 }
 
-.arrow-left {
+.arrow{
   position: absolute;
-  height: 5%;
-  left: 2.5rem;
+  height: 40px;
+  width: 40px;
   top: 45%;
   z-index: 4;
   cursor: url(../static/cursor-hand.svg) 5 5, auto;
   transition: all 0.5s;
 }
 
-.arrow-left:hover {
-  height: 5.5%;
+.arrow:hover {
+  height: 50px;
+  width: 50px;
 }
 
-.arrow-right {
-  position: absolute;
-  height: 5%;
-  top: 45%;
+.arrow-left:{
+  left: 5%;
+}
+
+.arrow-right{
   right: 5%;
-  z-index: 4;
-  cursor: url(../static/cursor-hand.svg) 5 5, auto;
-  transition: all 0.5s;
 }
 
-.arrow-right:hover {
-  height: 5.5%;
+.cloud, .fluid, .cube{
+  display: none;
 }
