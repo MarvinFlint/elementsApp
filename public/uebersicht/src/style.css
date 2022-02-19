@@ -287,7 +287,11 @@ header{
   width: 100%;
   overflow: hidden;
   z-index: 2;
-  background-color: black;
+  /* background-color: black; */
+}
+
+#stage canvas{
+  z-index: 3;
 }
 
 .attrbut-sctn {

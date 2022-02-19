@@ -3,7 +3,7 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import * as d3 from "d3";
+// import * as d3 from "d3";
 
 
 // jQuery
@@ -604,6 +604,7 @@ $(() => {
     if (redirectId && redirectId > 0) {
       // redirect to detailview based on given ID
       loadDetailView(redirectId);
+      $('.logo-helix').hide();
       $('.container').fadeIn(500).css('display', 'grid');
       $('header').fadeIn(500);
     }
@@ -632,7 +633,10 @@ function resetAlertTimer() {
 let switchId = 0;
 // function with id as parameter
 function loadDetailView(id){
+  // deload first canvas
   $('.webgl').fadeOut();
+  // delete possible previous canvas
+  $('#stage').children('canvas').remove();
   // read json file
   $.getJSON("/periodic-table.json", function (data) {
 
@@ -640,18 +644,19 @@ function loadDetailView(id){
     var pivot = new THREE.Object3D();
   
     // set the initial value for the second canvas
+    // define the clicked on element and assign switchId for the arrows
     var ordnungszahl = id;
     switchId = ordnungszahl;
     var quaternion = new THREE.Quaternion();
     var object;
   
     // atomicNumber = Außenatomen; davon immer zwei auf der ersten schale und dann i.d.r 8
-    // Spalten-Nummer ist Anzahl von Außenatomen
-  
-    
+    // Spalten-Nummer ist Anzahl von Außenatomen   
     var anzSchalen = 1;
     var config = data[ordnungszahl - 1].electronicConfiguration;
     var parts;
+
+    // Electronic Configuration notation
     var he = "1s2";
     var ne = he + " 2s2 2p6";
     var ar = ne + " 3s2 3p6";
@@ -659,6 +664,7 @@ function loadDetailView(id){
     var xe = kr + " 4d10 5s2 5p6";
     var rn = xe + " 4f14 5d10 6s2 6p6";
   
+    // set parts content
     if (config.includes("[He]")) {
       anzSchalen = 2;
       config = he + config.substring(4);
@@ -690,39 +696,47 @@ function loadDetailView(id){
   
     console.log(parts);
     var atomVerteilung = [];
-    var spheresAtoms = [];
   
+    // determine config
     for (var i = 0; i < parts.length; i++) {
+      // gets first letter of parts[i] from above
+      // which equals the number of the shell
       var schalenNummer = parseInt(parts[i].substring(0, 1));
+      // determine number of electrons on this specific shell
       var anzahl = parseInt(parts[i].substring(2));
   
+      // set specific array  index to match the number of electrons
       if (atomVerteilung[schalenNummer - 1] == null) {
         atomVerteilung[schalenNummer - 1] = anzahl;
       } else {
         atomVerteilung[schalenNummer - 1] += anzahl;
       }
     }
+
+    // debug
     console.log(atomVerteilung);
     console.log(data[ordnungszahl - 1].name);
   
+    // total number of electrons
     var anzElektronen = data[ordnungszahl - 1].atomicNumber;
-    var anzAussenelektronen = (anzElektronen - 2) % 8;
+    // var anzAussenelektronen = (anzElektronen - 2) % 8;
   
+    // total number of neutron / protons
     var kernZahl;
+
     if (ordnungszahl == 1) {
       kernZahl = 2;
     } else {
       kernZahl = 2 * anzElektronen + 1;
     }
   
+    // main function
     function sphereCollision(canvas) {
-      var camera, scene, renderer;
-  
-      var mouse = new THREE.Vector2(),
-        controls,
-        force;
-      var nodes,
-        spheresNodes = [],
+      let camera, scene, renderer;
+      scene = new THREE.Scene();
+      let mouse = new THREE.Vector2()
+      let controls, force;
+      let nodes, spheresNodes = [],
         root,
         raycaster = new THREE.Raycaster(),
         INTERSECTED;
@@ -831,7 +845,7 @@ function loadDetailView(id){
   
             mesh.position.set(xPos, yPos, 0);
             console.log(xPos);
-            // scene.add(mesh);
+            scene.add(mesh);
           }
           R += abstand;
           // mesh.rotation.z = value;
@@ -910,7 +924,7 @@ function loadDetailView(id){
   
         // controls = new THREE.OrbitControls(camera, renderer.domElement);
   
-        scene = new THREE.Scene();
+        
   
         // LIGHTS
   
@@ -974,7 +988,7 @@ function loadDetailView(id){
     // }
   
     // GIFs
-    
+    $('.cube, .fluid, .cloud').css('display', 'none');
     if (standardState == "solid") {
       $(".cube").css('display', 'block');
     } else if (standardState == "liquid") {
@@ -1002,6 +1016,7 @@ function loadDetailView(id){
 $('.x, .logo-detail').on('click', () => {
   $('.container, header').fadeOut();
   $('.webgl').fadeIn();
+  $('.logo-helix').fadeIn();
 })
 
 $(() => {
@@ -1009,7 +1024,6 @@ $(() => {
 })
 
 $('.arrow').on('click', (e) => {
-  console.log(e);
   if(e.target.classList.contains('arrow-left') && switchId > 0){
     loadDetailView(switchId - 1);
   }
