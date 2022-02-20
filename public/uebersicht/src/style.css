@@ -272,6 +272,7 @@ article {
   z-index: 2;
   grid-template-columns: 75% 25%;
   height: 100vh;
+  background-color: rgb(30, 30, 30);
 }
 
 header{
@@ -288,6 +289,7 @@ header{
   overflow: hidden;
   z-index: 2;
   /* background-color: black; */
+  background-color: rgb(30, 30, 30);
 }
 
 #stage canvas{

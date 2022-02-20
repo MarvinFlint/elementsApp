@@ -732,10 +732,10 @@ function loadDetailView(id){
   
     // main function
     function sphereCollision(canvas) {
-      let camera, scene, renderer;
-      scene = new THREE.Scene();
+      let camera, sceneD, renderer;
+      sceneD = new THREE.Scene();
       let mouse = new THREE.Vector2()
-      let controls, force;
+      let controlsD, force;
       let nodes, spheresNodes = [],
         root,
         raycaster = new THREE.Raycaster(),
@@ -819,7 +819,6 @@ function loadDetailView(id){
         var abstand = 1000;
         pivot.position.set(0, 0, 0);
         pivot.rotation.set(0, 0, 0);
-  
         //Versuch Schalenaufbau
   
         for (var s = 0; s < atomVerteilung.length; s++) {
@@ -838,20 +837,21 @@ function loadDetailView(id){
               side: THREE.DoubleSide,
             });
             const circle = new THREE.Mesh(circlegeometry, circlematerial);
-            scene.add(circle);
+            sceneD.add(circle);
   
             var mesh = new THREE.Mesh(geometry, material);
             pivot.add(mesh);
   
             mesh.position.set(xPos, yPos, 0);
-            console.log(xPos);
-            scene.add(mesh);
+            // console.log(xPos);
+            sceneD.add(mesh);
+            // console.log(mesh);
           }
           R += abstand;
           // mesh.rotation.z = value;
         }
   
-        scene.add(pivot);
+        sceneD.add(pivot);
   
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -869,7 +869,7 @@ function loadDetailView(id){
             var vec = new THREE.Vector3(nodes[i].x, nodes[i].y, nodes[i].z);
             sphere.position.add(vec);
             spheresNodes.push(sphere);
-            scene.add(sphere);
+            sceneD.add(sphere);
           } else {
             var geo = new THREE.SphereGeometry(nodes[i].radius, 20, 20);
             var sphere = new THREE.Mesh(
@@ -881,9 +881,22 @@ function loadDetailView(id){
             var vec = new THREE.Vector3(nodes[i].x, nodes[i].y, nodes[i].z);
             sphere.position.add(vec);
             spheresNodes.push(sphere);
-            scene.add(sphere);
+            sceneD.add(sphere);
           }
         }
+        /*
+        const testgeometry = new THREE.BoxGeometry( 1, 1, 1 );
+        const testmaterial = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        const cube = new THREE.Mesh( testgeometry, testmaterial );
+        cube.position.x = 0;
+        cube.position.y = 0;
+        cube.position.z = -5;
+        sceneD.add( cube );
+        console.log('Cube:');
+        console.log(cube);
+        console.log('Camera')
+        console.log(camera.position);
+        */
       }
   
       function updateSpheres() {
@@ -902,14 +915,11 @@ function loadDetailView(id){
       function setupScreen(canvas) {
         var containerEle = $(canvas);
   
+        
         //set camera
-        camera = new THREE.PerspectiveCamera(
-          45,
-          containerEle.innerWidth() / containerEle.innerHeight(),
-          1,
-          100000
-        );
-        camera.position.set(0, -10000, 7000);
+        camera = new THREE.PerspectiveCamera(45, containerEle.innerWidth() / containerEle.innerHeight(), 1, 100000);
+        camera.position.set(50, -100, 10000);
+        // controls.target(5, 5, 5);
   
         // RENDERER
   
@@ -922,7 +932,7 @@ function loadDetailView(id){
         renderer.domElement.style.position = "absolute";
         containerEle.append(renderer.domElement);
   
-        // controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controlsD = new OrbitControls(camera, renderer.domElement);
   
         
   
@@ -930,11 +940,11 @@ function loadDetailView(id){
   
         var directionalLight = new THREE.DirectionalLight("#ffffff", 0.5);
         directionalLight.position.set(100, 100, -100);
-        scene.add(directionalLight);
+        sceneD.add(directionalLight);
   
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.25);
         hemiLight.position.y = 5100;
-        scene.add(hemiLight);
+        sceneD.add(hemiLight);
   
         var axes = new THREE.AxisHelper(1000);
         // scene.add(axes);
@@ -959,7 +969,7 @@ function loadDetailView(id){
         updateSpheres();
         pivot.rotation.z += 0.002;
   
-        renderer.render(scene, camera);
+        renderer.render(sceneD, camera);
       }
   
       setupScreen(canvas);
@@ -1010,6 +1020,8 @@ function loadDetailView(id){
     $("#yeardiscovered").text(pElement.yearDiscovered);
   
     $(".eState").text(pElement.standardState);
+
+    
   });
 }
 
