@@ -1039,7 +1039,7 @@ $('.arrow').on('click', (e) => {
   if(e.target.classList.contains('arrow-left') && switchId > 0){
     loadDetailView(switchId - 1);
   }
-  else{
+  else if(e.target.classList.contains('arrow-right') && switchId < 118){
     loadDetailView(switchId + 1);
   }  
 })
