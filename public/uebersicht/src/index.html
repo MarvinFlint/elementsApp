@@ -71,44 +71,45 @@
       <img class="x" src="../static/x.png" />
     </header>
     <main class="container">
-      <article>
-        <img class="arrow arrow-left" src="../static/arrow-left.png"
-        />
-       <img class="arrow arrow-right" src="../static/arrow-right.png"
-        />
+      <div class="view view-left">
+        <img class="arrow arrow-left" src="../static/arrow-left.png" />
+        <img class="arrow arrow-right" src="../static/arrow-right.png" />
         <div id="stage"></div>
-      </article>
-      <aside class="info">
+      </div>
+      <div class="info view-right">
         <section class="attribut-sctn">
           <div class="symbol-block">
             <h4 id="atomicnumber"></h4>
             <h1 id="symbol"></h1>
             <h4 id="name"></h4>
           </div>
-          <table>
-            <tr>
-              <td><strong>group block </strong></td>
-              <td id="groupblock"></td>
-            </tr>
-            <tr>
-              <td><strong>boiling point </strong></td>
-              <td id="boilingpoint"></td>
-            </tr>
-            <tr>
-              <td><strong>electronegativity </strong></td>
-              <td id="electronegativity"></td>
-            </tr>
-            <tr>
-              <td><strong>year discovered </strong></td>
-              <td id="yeardiscovered"></td>
-            </tr>
-          </table>
+          <div class="attributes">
+            <p>
+              <span class="att-title">group block</span>
+              <span class="att-text" id="groupblock"></span>
+            </p>
+            <p>
+              <span class="att-title">boiling point</span>
+              <span class="att-text" id="boilingpoint"></span>
+            </p>
+            <p>
+              <span class="att-title">electronegativity</span>
+              <span class="att-text" id="electronegativity"></span>
+            </p>
+            <p>
+              <span class="att-title">year discovered</span>
+              <span class="att-text" id="yeardiscovered"></span>
+            </p>
+          </div>
         </section>
         <img class="gif cube" src="../static/cube_gif_800px_transparent.gif" />
         <img class="gif cloud" src="../static/cloud_gif_800px_violet.gif" />
-        <img class="gif fluid" src="../static/fluid_gif_800px_transparent.gif" />
+        <img
+          class="gif fluid"
+          src="../static/fluid_gif_800px_transparent.gif"
+        />
         <p class="eState"></p>
-      </aside>
+      </div>
     </main>
   </body>
 </html>

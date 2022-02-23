@@ -605,7 +605,7 @@ $(() => {
       // redirect to detailview based on given ID
       loadDetailView(redirectId);
       $('.logo-helix').hide();
-      $('.container').fadeIn(500).css('display', 'grid');
+      $('.container').fadeIn(500).css('display', 'flex');
       $('header').fadeIn(500);
     }
   });
@@ -693,8 +693,7 @@ function loadDetailView(id){
       anzSchalen = 1;
       parts = config.split(" ");
     }
-  
-    console.log(parts);
+
     var atomVerteilung = [];
   
     // determine config
@@ -712,10 +711,6 @@ function loadDetailView(id){
         atomVerteilung[schalenNummer - 1] += anzahl;
       }
     }
-
-    // debug
-    console.log(atomVerteilung);
-    console.log(data[ordnungszahl - 1].name);
   
     // total number of electrons
     var anzElektronen = data[ordnungszahl - 1].atomicNumber;
@@ -734,7 +729,6 @@ function loadDetailView(id){
     function sphereCollision(canvas) {
       let camera, sceneD, renderer;
       sceneD = new THREE.Scene();
-      let mouse = new THREE.Vector2()
       let controlsD, force;
       let nodes, spheresNodes = [],
         root,
@@ -884,19 +878,6 @@ function loadDetailView(id){
             sceneD.add(sphere);
           }
         }
-        /*
-        const testgeometry = new THREE.BoxGeometry( 1, 1, 1 );
-        const testmaterial = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-        const cube = new THREE.Mesh( testgeometry, testmaterial );
-        cube.position.x = 0;
-        cube.position.y = 0;
-        cube.position.z = -5;
-        sceneD.add( cube );
-        console.log('Cube:');
-        console.log(cube);
-        console.log('Camera')
-        console.log(camera.position);
-        */
       }
   
       function updateSpheres() {
@@ -908,21 +889,17 @@ function loadDetailView(id){
           spheresNodes[i].position.y = nodes[i].y - 200;
           spheresNodes[i].position.z = nodes[i].z;
         }
-  
-        //object = scene.getObjectByName('mesh');
       }
   
       function setupScreen(canvas) {
         var containerEle = $(canvas);
-  
         
         //set camera
         camera = new THREE.PerspectiveCamera(45, containerEle.innerWidth() / containerEle.innerHeight(), 1, 100000);
         camera.position.set(50, -100, 10000);
         // controls.target(5, 5, 5);
   
-        // RENDERER
-  
+        // RENDERER  
         renderer = new THREE.WebGLRenderer({
           antialias: true,
           alpha: true,
@@ -936,8 +913,7 @@ function loadDetailView(id){
   
         
   
-        // LIGHTS
-  
+        // LIGHTS  
         var directionalLight = new THREE.DirectionalLight("#ffffff", 0.5);
         directionalLight.position.set(100, 100, -100);
         sceneD.add(directionalLight);
@@ -979,23 +955,10 @@ function loadDetailView(id){
     $(function () {
       sphereCollision($("#stage"));
     });
-  
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Dynamic View
-  
+
+    // Dynamic View  
     var standardState = data[ordnungszahl - 1].standardState;
     var pElement = data[ordnungszahl - 1];
-  
-    // VIDEOs
-    // if(standardState == "solid") {
-    //     $('.standardstate').attr('src', './static/solid_cube_masked.webm');
-    // } else if (standardState == "liquid") {
-    //     $('.standardstate').attr('src', './static/fluid_sphere_masked.webm');
-    // } else if (standardState == "gas") {
-    //     $('.standardstate').attr('src', './static/cloud_sphere_masked.webm');
-    // } else {
-    //     $('.standardstate').attr('src', '');
-    // }
   
     // GIFs
     $('.cube, .fluid, .cloud').css('display', 'none');

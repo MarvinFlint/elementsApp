@@ -70,7 +70,7 @@ img {
   width: 12rem;
   margin: 2.5rem;
   display: none;
-  cursor: url(../static/cursor-arrow.svg) 5 5, auto;
+  cursor: url(../static/cursor-hand.svg) 5 5, auto;
   z-index: 5;
 }
 
@@ -264,13 +264,26 @@ input:checked + .slider:before {
 }
 
 /* Inserted CSS from Detailview */
-article {
+.view {
   position: relative;
+  width: 75%;
 }
+
+.info{
+  position: relative;
+  width: 25%;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+  color: white;
+  background-color: #816cff;
+}
+
 .container {
   display: none;
   z-index: 2;
-  grid-template-columns: 75% 25%;
   height: 100vh;
   background-color: rgb(30, 30, 30);
 }
@@ -288,7 +301,6 @@ header{
   width: 100%;
   overflow: hidden;
   z-index: 2;
-  /* background-color: black; */
   background-color: rgb(30, 30, 30);
 }
 
@@ -300,13 +312,8 @@ header{
   margin-bottom: 5rem;
 }
 
-.info {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  color: white;
-  background-color: #816cff;
+.symbol-block, .attributes{
+  margin-left: 5%;
 }
 
 h1 {
@@ -323,13 +330,29 @@ p {
   padding: 0.2rem;
 }
 
-td {
-  padding: 0.1rem;
-  padding-right: 1.8rem;
+.attributes p{
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  width: 80%;
 }
 
 h4 {
   font-size: 2rem;
+}
+
+.att-title{
+  font-weight: bold;
+  position: relative;
+}
+
+.att-title::after{
+  content: "?";
+  position: absolute;
+  top: -4;
+  font-size: 0.75rem;
+  right: -7px;
+  color: #fff;
 }
 
 .logo-detail {
@@ -383,7 +406,7 @@ video {
   width: 50px;
 }
 
-.arrow-left:{
+.arrow-left{
   left: 5%;
 }
 
@@ -393,4 +416,18 @@ video {
 
 .cloud, .fluid, .cube{
   display: none;
+}
+
+@media only screen and (max-width:1200px){
+  .container{
+    flex-direction: column;
+  }
+  .view{
+    width: 100%;
+    height: 50%;
+  }
+  .info{
+    width: 100%;
+    height: 50%;
+  }
 }

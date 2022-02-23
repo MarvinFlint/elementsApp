@@ -272,6 +272,7 @@ article {
   z-index: 2;
   grid-template-columns: 75% 25%;
   height: 100vh;
+  background-color: rgb(30, 30, 30);
 }
 
 header{
@@ -287,6 +288,12 @@ header{
   width: 100%;
   overflow: hidden;
   z-index: 2;
+  /* background-color: black; */
+  background-color: rgb(30, 30, 30);
+}
+
+#stage canvas{
+  z-index: 3;
 }
 
 .attrbut-sctn {
@@ -347,7 +354,8 @@ video {
 
 .x {
   position: absolute;
-  height: 5%;
+  height: 40px;
+  width: 40px;
   margin: 3rem 2.5rem;
   right: 26.5%;
   z-index: 4;
@@ -356,36 +364,35 @@ video {
 }
 
 .x:hover {
-  height: 5.5%;
+  height: 50px;
+  width: 50px;
 }
 
-.arrow-left {
+.arrow{
   position: absolute;
-  height: 5%;
-  left: 2.5rem;
+  height: 40px;
+  width: 40px;
   top: 45%;
   z-index: 4;
   cursor: url(assets/images/da1094b7e691aebf.svg) 5 5, auto;
   transition: all 0.5s;
 }
 
-.arrow-left:hover {
-  height: 5.5%;
+.arrow:hover {
+  height: 50px;
+  width: 50px;
 }
 
-.arrow-right {
-  position: absolute;
-  height: 5%;
-  top: 45%;
+.arrow-left:{
+  left: 5%;
+}
+
+.arrow-right{
   right: 5%;
-  z-index: 4;
-  cursor: url(assets/images/da1094b7e691aebf.svg) 5 5, auto;
-  transition: all 0.5s;
 }
 
-.arrow-right:hover {
-  height: 5.5%;
+.cloud, .fluid, .cube{
+  display: none;
 }
-
 
 /*# sourceMappingURL=main.css.map*/
