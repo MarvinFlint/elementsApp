@@ -214,7 +214,7 @@ function createTable(filterVar) {
 }
 
 // Helix function
-function createHelix(filterVar) {
+function createHelix(filtersArr) {
   // separate counter variable for filters
   let c = 0;
   let filteredElements = [];
@@ -232,7 +232,7 @@ function createHelix(filterVar) {
 
   // JSON read call
   $.getJSON("periodic-table.json", function (data) {
-    if (filterVar) {
+    if (filtersArr) {
       for (let i = 0; i < data.length; i++) {
         // constellation math
         const theta = i * 0.175 + Math.PI; //default  0.175
@@ -240,9 +240,9 @@ function createHelix(filterVar) {
 
         // check for set filters
         if (
-          filterVar === data[i].groupBlock ||
-          filterVar === data[i].standardState ||
-          filterVar === data[i].bondingType
+          filtersArr['mg1'] === data[i].groupBlock &&
+          filtersArr['sts'] === data[i].standardState &&
+          filtersArr['bt'] === data[i].bondingType
         ) {
           // assign the c'th element in this array the index of the current element should it match the filter
           filteredElements[c] = i;
@@ -514,11 +514,16 @@ $(".logo-helix").on("click", () => {
 
 /* Filters */
 // maingroup filter
-let filtersArr = [];
+let filtersArr = { mg1: true, sts: true, bt: true };
 
 $(".filters").on("change", (e) => {
   let changedElement = e.target.classList[1];
-  let eVal = $(`.${changedElement}`).val()
+  let eVal = $(`.${changedElement}`).val();
+  filtersArr[changedElement] = eVal;
+
+  if(eVal == "true"){
+    eVal = true;
+  }
   
   for (let i = 0; i < targets.table.length; i++) {
     scene.remove(targets.table[i]);
@@ -529,9 +534,9 @@ $(".filters").on("change", (e) => {
 
   // check which view is currently active and build a new one with the given parameter
   if ($(".btn").hasClass("active")) {
-    createTable(eVal);
+    createTable(filtersArr);
   } else {
-    createHelix(eVal);
+    createHelix(filtersArr);
   }
 
   // reenable panning
