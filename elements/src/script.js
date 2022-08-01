@@ -512,12 +512,14 @@ $(".logo-helix").on("click", () => {
   createHelix();
 });
 
+/* Filters */
 // maingroup filter
-$(".mg1").on("change", () => {
-  // get the value of the selected option
-  let s = $(".mg1").val();
+let filtersArr = [];
 
-  // remove all prior elements
+$(".filters").on("change", (e) => {
+  let changedElement = e.target.classList[1];
+  let eVal = $(`.${changedElement}`).val()
+  
   for (let i = 0; i < targets.table.length; i++) {
     scene.remove(targets.table[i]);
   }
@@ -527,57 +529,15 @@ $(".mg1").on("change", () => {
 
   // check which view is currently active and build a new one with the given parameter
   if ($(".btn").hasClass("active")) {
-    createTable(s);
+    createTable(eVal);
   } else {
-    createHelix(s);
+    createHelix(eVal);
   }
 
   // reenable panning
   controls.enablePan = true;
-});
 
-$(".sts").on("change", () => {
-  // get the value of the selected option
-  let s = $(".sts").val();
-
-  // remove all prior elements
-  for (let i = 0; i < targets.table.length; i++) {
-    scene.remove(targets.table[i]);
-  }
-  for (let i = 0; i < targets.helix.length; i++) {
-    scene.remove(targets.helix[i]);
-  }
-
-  // check which view is currently active and build a new one with the given parameter
-  if ($(".btn").hasClass("active")) {
-    createTable(s);
-  } else {
-    createHelix(s);
-  }
-
-  // reeanble panning
-  controls.enablePan = true;
-});
-
-$(".bt").on("change", () => {
-  // get the value of the selected option
-  let s = $(".bt").val();
-
-  // remove all prior elements
-  for (let i = 0; i < targets.table.length; i++) {
-    scene.remove(targets.table[i]);
-  }
-  for (let i = 0; i < targets.helix.length; i++) {
-    scene.remove(targets.helix[i]);
-  }
-
-  // check which view is currently active and build a new one with the given parameter
-  if ($(".btn").hasClass("active")) {
-    createTable(s);
-  } else {
-    createHelix(s);
-  }
-});
+})
 
 // redirection
 
@@ -638,7 +598,7 @@ function loadDetailView(id){
   // delete possible previous canvas
   $('#stage').children('canvas').remove();
   // read json file
-  $.getJSON("/periodic-table.json", function (data) {
+  $.getJSON("periodic-table.json", function (data) {
 
     // generate pivot
     var pivot = new THREE.Object3D();
