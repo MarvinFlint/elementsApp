@@ -216,8 +216,7 @@ function createTable(filterVar) {
 // Helix function
 function createHelix(filtersArr) {
   // separate counter variable for filters
-  let c = 0;
-  let filteredElements = [];
+  let newFilteredElements = [];
 
   // empty raycasterTestObjects and helix array
   for (let i = 0; i < targets.helix.length; i++) {
@@ -232,31 +231,46 @@ function createHelix(filtersArr) {
 
   // JSON read call
   $.getJSON("periodic-table.json", function (data) {
+    // check if filters are set
     if (filtersArr) {
       for (let i = 0; i < data.length; i++) {
-        // constellation math
-        const theta = i * 0.175 + Math.PI; //default  0.175
-        const y = -(i * 0.05) + 2;
 
-        // check for set filters
-        if (
-          filtersArr['mg1'] === data[i].groupBlock &&
-          filtersArr['sts'] === data[i].standardState &&
-          filtersArr['bt'] === data[i].bondingType
-        ) {
-          // assign the c'th element in this array the index of the current element should it match the filter
-          filteredElements[c] = i;
+        // fill the array initially
+        newFilteredElements[i] = i;
+        // remove elements that DO NOT match the filter
+        if (filtersArr['mg1'] && !(filtersArr['mg1'] === data[i].groupBlock)) {
+          // prevent duplicate removal
+          let rmIndex = newFilteredElements.indexOf(i);
+          newFilteredElements.splice(rmIndex, 1);
+        }
+        if (filtersArr['sts'] && !(filtersArr['sts'] === data[i].standardState)) {
+          // prevent duplicate removal
+          let rmIndex = newFilteredElements.indexOf(i);
+          newFilteredElements.splice(rmIndex, 1);
+        }
+        if (filtersArr['bt'] && !(filtersArr['bt'] === data[i].bondingType)) {
+          // prevent duplicate removal
+          let rmIndex = newFilteredElements.indexOf(i);
+          newFilteredElements.splice(rmIndex, 1);
+        }
+      }
 
-          // create object and assign texture
+      let counter = 0;
+      for (let m = 0; m < data.length; m++) {
+        if (newFilteredElements[m]) {
+          // constellation math
+          const theta = m * 0.175 + Math.PI; //default  0.175
+          const y = -(m * 0.05) + 2;
+
           const object = new THREE.Mesh(
             geometryBox,
             new THREE.MeshBasicMaterial({
-              map: textures[filteredElements[c]],
+              map: textures[m],
             })
           );
 
           // assign name for redirection id
-          object.name = i;
+          object.name = m;
 
           // position the cube
           object.position.setFromCylindricalCoords(8, theta, y);
@@ -270,13 +284,15 @@ function createHelix(filtersArr) {
           targets.helix.push(object);
 
           // add cubes to scene
-          scene.add(targets.helix[c]);
-
-          // increase counter for each found element
-          c++;
+          scene.add(targets.helix[counter]);
+          console.log("counter: " + counter);
+          console.log("m:" + m)
+          counter++;
         }
       }
       // after the loop is through, assign the raycasterTestObjects
+
+      console.log(newFilteredElements);
       raycasterTestObjects = targets.helix;
     }
     // no filters are set
@@ -508,23 +524,27 @@ $(".logo-helix").on("click", () => {
     scene.remove(targets.table[i]);
   }
 
+  // reset filters
+  $('#maingroups, #standardstates, #bondingtype').val('default');
+  filtersArr = { mg1: false, sts: false, bt: false };
+
   // create default view
   createHelix();
 });
 
 /* Filters */
 // maingroup filter
-let filtersArr = { mg1: true, sts: true, bt: true };
+let filtersArr = { mg1: false, sts: false, bt: false };
 
 $(".filters").on("change", (e) => {
   let changedElement = e.target.classList[1];
   let eVal = $(`.${changedElement}`).val();
   filtersArr[changedElement] = eVal;
 
-  if(eVal == "true"){
+  if (eVal == "true") {
     eVal = true;
   }
-  
+
   for (let i = 0; i < targets.table.length; i++) {
     scene.remove(targets.table[i]);
   }
@@ -597,7 +617,7 @@ function resetAlertTimer() {
 /* detailview js */
 let switchId = 0;
 // function with id as parameter
-function loadDetailView(id){
+function loadDetailView(id) {
   // deload first canvas
   $('.webgl').fadeOut();
   // delete possible previous canvas
@@ -607,14 +627,14 @@ function loadDetailView(id){
 
     // generate pivot
     var pivot = new THREE.Object3D();
-  
+
     // set the initial value for the second canvas
     // define the clicked on element and assign switchId for the arrows
     var ordnungszahl = id;
     switchId = ordnungszahl;
     var quaternion = new THREE.Quaternion();
     var object;
-  
+
     // atomicNumber = Außenatomen; davon immer zwei auf der ersten schale und dann i.d.r 8
     // Spalten-Nummer ist Anzahl von Außenatomen   
     var anzSchalen = 1;
@@ -628,7 +648,7 @@ function loadDetailView(id){
     var kr = ar + " 3d10 4s2 4p6";
     var xe = kr + " 4d10 5s2 5p6";
     var rn = xe + " 4f14 5d10 6s2 6p6";
-  
+
     // set parts content
     if (config.includes("[He]")) {
       anzSchalen = 2;
@@ -660,7 +680,7 @@ function loadDetailView(id){
     }
 
     var atomVerteilung = [];
-  
+
     // determine config
     for (var i = 0; i < parts.length; i++) {
       // gets first letter of parts[i] from above
@@ -668,7 +688,7 @@ function loadDetailView(id){
       var schalenNummer = parseInt(parts[i].substring(0, 1));
       // determine number of electrons on this specific shell
       var anzahl = parseInt(parts[i].substring(2));
-  
+
       // set specific array  index to match the number of electrons
       if (atomVerteilung[schalenNummer - 1] == null) {
         atomVerteilung[schalenNummer - 1] = anzahl;
@@ -676,11 +696,11 @@ function loadDetailView(id){
         atomVerteilung[schalenNummer - 1] += anzahl;
       }
     }
-  
+
     // total number of electrons
     var anzElektronen = data[ordnungszahl - 1].atomicNumber;
     // var anzAussenelektronen = (anzElektronen - 2) % 8;
-  
+
     // total number of neutron / protons
     var kernZahl;
 
@@ -689,7 +709,7 @@ function loadDetailView(id){
     } else {
       kernZahl = 2 * anzElektronen + 1;
     }
-  
+
     // main function
     function sphereCollision(canvas) {
       let camera, sceneD, renderer;
@@ -699,13 +719,13 @@ function loadDetailView(id){
         root,
         raycaster = new THREE.Raycaster(),
         INTERSECTED;
-  
+
       function rnd(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
-  
+
       //Expansion of collision function from http://bl.ocks.org/mbostock/3231298
-  
+
       function collide(node) {
         var r = node.radius,
           nx1 = node.x - r,
@@ -721,13 +741,13 @@ function loadDetailView(id){
               z = node.z - quad.point.z,
               l = Math.sqrt(x * x + y * y + z * z),
               r = node.radius + quad.point.radius;
-  
+
             if (l < r) {
               l = ((l - r) / l) * 0.5;
               node.x -= x *= l;
               node.y -= y *= l;
               node.z -= z *= l;
-  
+
               quad.point.x += x;
               quad.point.y += y;
               quad.point.z += z;
@@ -738,12 +758,12 @@ function loadDetailView(id){
           );
         };
       }
-  
+
       function getSpherePackPositions(canvas) {
         var containerEle = $(canvas);
         var SCREEN_WIDTH = containerEle.innerWidth();
         var SCREEN_HEIGHT = containerEle.innerHeight();
-  
+
         nodes = d3.range(kernZahl).map(function () {
           // Mapt die Kugeln; Anzahl festgelegt
           return {
@@ -753,7 +773,7 @@ function loadDetailView(id){
         root = nodes[0];
         root.radius = 0.1;
         root.fixed = true;
-  
+
         force = d3.layout
           .force3D()
           .gravity(0.5) //Anziehung
@@ -762,13 +782,13 @@ function loadDetailView(id){
           })
           .nodes(nodes)
           .size([SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1]);
-  
+
         force.start();
-  
+
         return nodes;
       }
       var angle = 1;
-  
+
       function addSpheres() {
         //Schalen
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -779,17 +799,17 @@ function loadDetailView(id){
         pivot.position.set(0, 0, 0);
         pivot.rotation.set(0, 0, 0);
         //Versuch Schalenaufbau
-  
+
         for (var s = 0; s < atomVerteilung.length; s++) {
           for (var n = 0; n < atomVerteilung[s]; n++) {
             xPos = R * Math.cos((n / atomVerteilung[s]) * 2 * Math.PI);
             yPos = R * Math.sin((n / atomVerteilung[s]) * 2 * Math.PI);
-  
+
             var geometry = new THREE.SphereGeometry(80, 50, 16);
             var material = new THREE.MeshLambertMaterial({
               color: 0xffffff, // Color Electrons
             });
-  
+
             const circlegeometry = new THREE.RingGeometry(R, R + 10, 80);
             const circlematerial = new THREE.MeshBasicMaterial({
               color: 0x816cff, // Color Circles
@@ -797,10 +817,10 @@ function loadDetailView(id){
             });
             const circle = new THREE.Mesh(circlegeometry, circlematerial);
             sceneD.add(circle);
-  
+
             var mesh = new THREE.Mesh(geometry, material);
             pivot.add(mesh);
-  
+
             mesh.position.set(xPos, yPos, 0);
             // console.log(xPos);
             sceneD.add(mesh);
@@ -809,13 +829,13 @@ function loadDetailView(id){
           R += abstand;
           // mesh.rotation.z = value;
         }
-  
+
         sceneD.add(pivot);
-  
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
         var nodes = getSpherePackPositions(canvas);
-  
+
         for (var i = 0; i < nodes.length; i++) {
           if (i % 2 == true) {
             var geo = new THREE.SphereGeometry(nodes[i].radius, 20, 20);
@@ -844,7 +864,7 @@ function loadDetailView(id){
           }
         }
       }
-  
+
       function updateSpheres() {
         //Position
         var q = d3.geom.octree(nodes);
@@ -855,68 +875,68 @@ function loadDetailView(id){
           spheresNodes[i].position.z = nodes[i].z;
         }
       }
-  
+
       function setupScreen(canvas) {
         var containerEle = $(canvas);
-        
+
         //set camera
         camera = new THREE.PerspectiveCamera(45, containerEle.innerWidth() / containerEle.innerHeight(), 1, 100000);
         camera.position.set(50, -100, 10000);
         // controls.target(5, 5, 5);
-  
+
         // RENDERER  
         renderer = new THREE.WebGLRenderer({
           antialias: true,
           alpha: true,
         });
-  
+
         renderer.setSize(containerEle.innerWidth(), containerEle.innerHeight());
         renderer.domElement.style.position = "absolute";
         containerEle.append(renderer.domElement);
-  
+
         controlsD = new OrbitControls(camera, renderer.domElement);
-  
-        
-  
+
+
+
         // LIGHTS  
         var directionalLight = new THREE.DirectionalLight("#ffffff", 0.5);
         directionalLight.position.set(100, 100, -100);
         sceneD.add(directionalLight);
-  
+
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.25);
         hemiLight.position.y = 5100;
         sceneD.add(hemiLight);
-  
+
         var axes = new THREE.AxisHelper(1000);
         // scene.add(axes);
-  
+
         window.addEventListener("resize", onWindowResize, false);
-  
+
         function onWindowResize() {
           camera.aspect = containerEle.innerWidth() / containerEle.innerHeight();
           camera.updateProjectionMatrix();
           renderer.setSize(containerEle.innerWidth(), containerEle.innerHeight());
         }
-  
+
         addSpheres();
       }
-  
+
       function animate() {
         requestAnimationFrame(animate);
         render();
       }
-  
+
       function render() {
         updateSpheres();
         pivot.rotation.z += 0.002;
-  
+
         renderer.render(sceneD, camera);
       }
-  
+
       setupScreen(canvas);
       animate();
     }
-  
+
     $(function () {
       sphereCollision($("#stage"));
     });
@@ -924,7 +944,7 @@ function loadDetailView(id){
     // Dynamic View  
     var standardState = data[ordnungszahl - 1].standardState;
     var pElement = data[ordnungszahl - 1];
-  
+
     // GIFs
     $('.cube, .fluid, .cloud').css('display', 'none');
     if (standardState == "solid") {
@@ -936,20 +956,20 @@ function loadDetailView(id){
     } else {
       $(".cloud").css('display', 'block');
     }
-    
+
 
     $("#atomicnumber").text(pElement.atomicNumber);
     $("#symbol").text(pElement.symbol);
     $("#name").text(pElement.name);
-  
+
     $("#groupblock").text(pElement.groupBlock);
     $("#boilingpoint").text(pElement.boilingPoint);
     $("#electronegativity").text(pElement.electronegativity);
     $("#yeardiscovered").text(pElement.yearDiscovered);
-  
+
     $(".eState").text(pElement.standardState);
 
-    
+
   });
 }
 
@@ -957,17 +977,21 @@ $('.x, .logo-detail').on('click', () => {
   $('.container, header').fadeOut();
   $('.webgl').fadeIn();
   $('.logo-helix').fadeIn();
+
+  // reset filters
+  $('#maingroups, #standardstates, #bondingtype').val('default');
 })
 
 $(() => {
   $('.info').fadeIn(1500).css('display', 'flex');
+  $('#maingroups, #standardstates, #bondingtype').val('default');
 })
 
 $('.arrow').on('click', (e) => {
-  if(e.target.classList.contains('arrow-left') && switchId > 0){
+  if (e.target.classList.contains('arrow-left') && switchId > 0) {
     loadDetailView(switchId - 1);
   }
-  else if(e.target.classList.contains('arrow-right') && switchId < 118){
+  else if (e.target.classList.contains('arrow-right') && switchId < 118) {
     loadDetailView(switchId + 1);
-  }  
+  }
 })
