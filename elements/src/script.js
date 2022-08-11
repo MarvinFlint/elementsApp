@@ -239,22 +239,16 @@ function createHelix(filtersArr) {
         newFilteredElements[i] = i;
         // remove elements that DO NOT match the filter
         if (filtersArr['mg1'] && !(filtersArr['mg1'] === data[i].groupBlock)) {
-          // prevent duplicate removal
-          let rmIndex = newFilteredElements.indexOf(i);
-          newFilteredElements.splice(rmIndex, 1);
+          newFilteredElements.splice(i, 1);
         }
         if (filtersArr['sts'] && !(filtersArr['sts'] === data[i].standardState)) {
-          // prevent duplicate removal
-          let rmIndex = newFilteredElements.indexOf(i);
-          newFilteredElements.splice(rmIndex, 1);
+          newFilteredElements.splice(i, 1);
         }
         if (filtersArr['bt'] && !(filtersArr['bt'] === data[i].bondingType)) {
-          // prevent duplicate removal
-          let rmIndex = newFilteredElements.indexOf(i);
-          newFilteredElements.splice(rmIndex, 1);
+          newFilteredElements.splice(i, 1);
         }
+        console.log(filtersArr);
       }
-
       let counter = 0;
       for (let m = 0; m < data.length; m++) {
         if (newFilteredElements[m]) {
@@ -287,6 +281,7 @@ function createHelix(filtersArr) {
           scene.add(targets.helix[counter]);
           console.log("counter: " + counter);
           console.log("m:" + m)
+          console.log("array at index m: " + newFilteredElements[m]);
           counter++;
         }
       }
