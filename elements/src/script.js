@@ -119,6 +119,10 @@ const geometryBox = new RoundedBoxGeometry(1, 1, 1, 10, 0.1);
 
 // table function
 function createTable(filterVar) {
+
+  // separate counter variable for filters
+  let newFilteredElements = [];
+
   // reset raycaster and target arrays
   for (let i = 0; i < targets.helix.length; i++) {
     scene.remove(targets.helix[i]);
@@ -129,54 +133,64 @@ function createTable(filterVar) {
   raycasterTestObjects = [];
   targets.table = [];
   targets.helix = [];
+
   // rows and cols for the grid
   let row = Math.round(118 / 16 / 2) - 1;
   let col = -8;
   // seperate counter variable for filters
-  let c = 0;
-  let filteredElements = [];
 
   // JSON read call
   $.getJSON("periodic-table.json", function (data) {
     if (filterVar) {
       for (let i = 0; i < data.length; i++) {
-        // check if any filters are set
-        if (
-          filterVar === data[i].groupBlock ||
-          filterVar === data[i].standardState ||
-          filterVar === data[i].bondingType
-        ) {
+        // fill the array initially
+        newFilteredElements[i] = i;
+        // remove elements that DO NOT match the filter
+        if (filtersArr['mg1'] && !(filtersArr['mg1'] === data[i].groupBlock)) {
+          newFilteredElements.splice(i, 1);
+        }
+        if (filtersArr['sts'] && !(filtersArr['sts'] === data[i].standardState)) {
+          newFilteredElements.splice(i, 1);
+        }
+        if (filtersArr['bt'] && !(filtersArr['bt'] === data[i].bondingType)) {
+          newFilteredElements.splice(i, 1);
+        }
+      }
+      console.log(newFilteredElements);
+      // check if any filters are set
+      let counter = 0;
+      for (let m = 0; m < data.length; m++) {
+        if (newFilteredElements[m]) {
           // grid formation
           if (col > 8) {
             row--;
             col = -8;
           }
-          // assign the c'th element in this array the index of the current element should it match the filter
-          filteredElements[c] = i;
           // generate new object and apply the texture. here the above array comes into play
           const object = new THREE.Mesh(
             geometryBox,
             new THREE.MeshBasicMaterial({
-              map: textures[filteredElements[c]],
+              map: textures[m],
             })
           );
 
           // assign the object name the current index (for redirection)
-          object.name = i;
+          object.name = m;
 
           // add object to table array
           targets.table.push(object);
-          targets.table[c].position.x = col * 1.8;
-          targets.table[c].position.y = row * 2.5;
+          targets.table[counter].position.x = col * 1.8;
+          targets.table[counter].position.y = row * 2.5;
           // add cubes to scene
-          scene.add(targets.table[c]);
+          scene.add(targets.table[counter]);
 
           // increase the column
           col++;
           // increase c for each found element
-          c++;
+          counter++;
         }
       }
+
       // after the loop is through, assign the raycasterTestObjects
       raycasterTestObjects = targets.table;
     }
@@ -247,7 +261,6 @@ function createHelix(filtersArr) {
         if (filtersArr['bt'] && !(filtersArr['bt'] === data[i].bondingType)) {
           newFilteredElements.splice(i, 1);
         }
-        console.log(filtersArr);
       }
       let counter = 0;
       for (let m = 0; m < data.length; m++) {
