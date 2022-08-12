@@ -547,11 +547,14 @@ let filtersArr = { mg1: false, sts: false, bt: false };
 $(".filters").on("change", (e) => {
   let changedElement = e.target.classList[1];
   let eVal = $(`.${changedElement}`).val();
+
+  if (eVal == "default") {
+    eVal = false;
+  }
+  
   filtersArr[changedElement] = eVal;
 
-  if (eVal == "true") {
-    eVal = true;
-  }
+  
 
   for (let i = 0; i < targets.table.length; i++) {
     scene.remove(targets.table[i]);
