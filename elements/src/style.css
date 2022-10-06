@@ -253,6 +253,28 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+#reset {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  margin-left: 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition: all ease-in-out 0.5s;
+  border: 2px solid white;
+  border-radius: 3rem;
+}
+
+#reset:hover {
+  border-color: #816cff;
+  color: #816cff;
+  cursor: url(../static/cursor-hand.svg) 5 5, auto;
+  transition: all ease-in-out 0.5s;
+}
+
 .alert {
   position: absolute;
   display: none;
