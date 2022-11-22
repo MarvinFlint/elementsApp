@@ -1,6 +1,6 @@
 # elementsApp
 
-A node based webapp, using [threejs](threejs.org) displaying the periodic table in 3D space.
+A node based webapp, using [threejs](https://threejs.org) displaying the periodic table in 3D space.
 
 ---
 
